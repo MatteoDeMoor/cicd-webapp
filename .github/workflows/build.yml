@@ -6,20 +6,19 @@ on:
       - main
 jobs:
   lint:
-    name: ⬣ Lint
     runs-on: ubuntu-latest
     steps:
-      - name: ⬇️ Checkout repo
-        uses: actions/checkout@v4
+      - name: Check out repository code
+        uses: actions/checkout@v3
 
-      - name: ⎔ Setup node
-        uses: actions/setup-node@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
           node-version-file: ".nvmrc"
           cache: "yarn"
 
-      - name: 📥 Install deps
+      - name: Install dependencies
         run: yarn --frozen-lockfile
 
-      - name: 🔬 Lint
+      - name: Run Lint
         run: yarn lint
