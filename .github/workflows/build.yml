@@ -1,11 +1,10 @@
----
 name: Build and test
 on:
   push:
     branches:
       - main
 jobs:
-  lint:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -14,11 +13,10 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version-file: "20"
-          cache: "yarn"
+          node-version: '20'
 
       - name: Install dependencies
-        run: yarn --frozen-lockfile
-
-      - name: Run Lint
+        run: yarn install
+        
+      - name: Run lint
         run: yarn lint
