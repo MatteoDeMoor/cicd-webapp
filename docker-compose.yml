@@ -1,23 +1,32 @@
-version: '3.8'
-
+version: '3.8'  # Specify the version
 services:
   webapp:
+    build:   # Add this to build from a Dockerfile
+      context: .  # Use the current directory as context
+      dockerfile: Dockerfile
     image: webapp-webapp
     ports:
       - "3000:3000"
-    volumes:
-      - ./database:/app/database
     environment:
-      MYSQL_URL: mysql://matteo:MySecureUserPassword!@database:3306/mydb  # MySQL URL
+      MYSQL_URL: mysql://root:VerySecretPassword@database:3306/mydb # MySQL URL
     depends_on:
-      - database  # The database is started if the application is started
+      database:  
+        condition: service_healthy
 
   database:
-    image: mysql:latest  # Use the official MySQL image
+    image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: MySecureRootPassword!  # Root password
-      MYSQL_DATABASE: mydb  # Database name
-      MYSQL_USER: matteo  # User name
-      MYSQL_PASSWORD: MySecureUserPassword!  # Password for the user
+      MYSQL_ROOT_PASSWORD: VerySecretPassword
+      MYSQL_DATABASE: mydb
     ports:
-      - "3307:3306"  # MySQL port
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mysql-data:
