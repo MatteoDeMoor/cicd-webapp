@@ -19,6 +19,6 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --production=false
-        
+
       - name: Run lint
         run: yarn lint
