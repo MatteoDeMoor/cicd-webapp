@@ -1,4 +1,3 @@
----
 name: Build and test
 on:
   push:
@@ -22,6 +21,11 @@ jobs:
       - name: Load .env file
         run: |
           echo "LINT_VERSION=$(grep LINT_VERSION .env | cut -d '=' -f2)" >> $GITHUB_ENV
+          echo "YAML_LINT=$(grep YAML_LINT .env | cut -d '=' -f2)" >> $GITHUB_ENV
 
       - name: Run lint
-        run: yarn eslint --version ${{ env.LINT_VERSION }}
+        run: yarn lint
+
+      - name: Conditionally run YAML linting
+        if: env.YAML_LINT == 'true'
+        run: yarn yaml-lint *.yml
