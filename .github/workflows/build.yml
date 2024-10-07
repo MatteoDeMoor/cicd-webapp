@@ -23,4 +23,4 @@ jobs:
           echo "LINT_VERSION=$(grep LINT_VERSION .env | cut -d '=' -f2)" >> $GITHUB_ENV
 
       - name: Run lint
-        run: yarn eslint --version ${{ env.LINT_VERSION }}
+        run: yarn lint --version ${{ env.LINT_VERSION }}
