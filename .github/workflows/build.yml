@@ -18,8 +18,9 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Set Lint Version
-        run: echo "lint_version=$(cat .env | grep LINT_VERSION | cut -d '=' -f2)" >> $GITHUB_ENV
+      - name: Load .env file
+        run: |
+          echo "LINT_VERSION=$(grep LINT_VERSION .env | cut -d '=' -f2)" >> $GITHUB_ENV
 
       - name: Run lint
-        run: yarn lint --version ${{ env.lint_version }}
+        run: yarn eslint --version ${{ env.LINT_VERSION }}
