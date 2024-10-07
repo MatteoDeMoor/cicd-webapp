@@ -1,14 +1,19 @@
+# docker compose -f docker-compose-mysql.yml up -d
+
 version: '3.8'
 
 services:
   webapp:
-    image: matteodemoor/webapp  # Now refers to the Docker Hub image
+    build:   # Build from a Dockerfile
+      context: .  # Use the current directory as context
+      dockerfile: Dockerfile
+    image: webapp-webapp
     ports:
       - "3000:3000"
     environment:
-      MYSQL_URL: mysql://root:VerySecretPassword@database:3306/mydb  # MySQL URL
+      MYSQL_URL: mysql://root:VerySecretPassword@database:3306/mydb # MySQL URL
     depends_on:
-      database:
+      database:  
         condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/"]
@@ -32,7 +37,7 @@ services:
       retries: 5
 
   test:
-    image: matteodemoor/webapp  # Now refers to the same Docker Hub image
+    image: webapp-webapp  # Use the existing image
     depends_on:
       - webapp
     environment:
